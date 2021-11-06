@@ -5,22 +5,26 @@ const mongoose = require("mongoose");
 
 router.post("/", async (req, res) => {
   try {
-    const email = req.body.email;
-    const { date, fundAlloted, description } = req.body.newBudget;
-
+    const email = req.body.userid;
+    const { budgetName, date, amount, spentOn } = req.body.expense;
     const newBudget = mongoose.model(email, budgetSchema);
 
-    const budget = new newBudget({
-      date,
-      fundAlloted,
-      description,
-    });
+    await newBudget.findOneAndUpdate(
+      { description: budgetName },
+      {
+        $addToSet: {
+          budgets: {
+            bgDate: date,
+            amount: amount,
+            spentOn: spentOn,
+          },
+        },
+      }
+    );
 
-    await budget.save();
-
-    console.log(email, date, fundAlloted, description);
     res.status(200).send("Data Recieved");
   } catch (e) {
+    console.log(e);
     res.status(400).send("Server Error");
   }
 });

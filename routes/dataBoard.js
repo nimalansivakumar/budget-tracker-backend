@@ -5,22 +5,10 @@ const mongoose = require("mongoose");
 
 router.post("/", async (req, res) => {
   try {
-    const email = req.body.email;
-    const { date, fundAlloted, description } = req.body.newBudget;
-
-    const newBudget = mongoose.model(email, budgetSchema);
-
-    const budget = new newBudget({
-      date,
-      fundAlloted,
-      description,
-    });
-
-    await budget.save();
-
-    console.log(email, date, fundAlloted, description);
+    console.log(req.body);
     res.status(200).send("Data Recieved");
   } catch (e) {
+    console.log(e);
     res.status(400).send("Server Error");
   }
 });

@@ -19,6 +19,8 @@ connectDB();
 app.use("/sign-in", require("./routes/signIn"));
 app.use("/dashboard", require("./routes/dashboard"));
 app.use("/dashboard/addBudget", require("./routes/addBudget"));
+app.use("/dashboard/dataEntry", require("./routes/dataEntry"));
+app.use("/dashboard/dataBoard", require("./routes/dataBoard"));
 
 app.get("/", (req, res) => res.send("API is running"));
 app.listen(PORT, () =>
