@@ -5,7 +5,11 @@ const mongoose = require("mongoose");
 
 router.post("/", async (req, res) => {
   try {
-    console.log(req.body);
+    const { email, budget } = req.body;
+    const searchDB = mongoose.model(email, budgetSchema);
+    const fetchedBudget = await searchDB.find({ description: budget });
+    res.json(fetchedBudget);
+    
     res.status(200).send("Data Recieved");
   } catch (e) {
     console.log(e);
