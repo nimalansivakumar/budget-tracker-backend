@@ -1,20 +1,21 @@
 const express = require("express");
+const budgets = require("../models/budgets");
 const router = express.Router();
-const budgetSchema = require("../models/budgets");
-const mongoose = require("mongoose");
+const Budgets = require("../models/budgets");
 
 router.post("/", async (req, res) => {
   try {
-    const email = req.body.userid;
-    const { budgetName, date, amount, spentOn } = req.body.expense;
-    const newBudget = mongoose.model(email, budgetSchema);
+    const { budgetChose, date, amount, spentOn } = req.body.expense;
 
-    await newBudget.findOneAndUpdate(
-      { description: budgetName },
+    await Budgets.findOneAndUpdate(
+      {
+        id: req.body.userid,
+      },
       {
         $addToSet: {
-          budgets: {
-            bgDate: date,
+          expenses: {
+            budgetName: budgetChose,
+            expenseDate: date,
             amount: amount,
             spentOn: spentOn,
           },
@@ -30,3 +31,13 @@ router.post("/", async (req, res) => {
 });
 
 module.exports = router;
+
+// {
+//   $addToSet: {
+//     expenses: {
+//       expenseDate: date,
+//       amount: amount,
+//       spentOn: spentOn,
+//     },
+//   },
+// }

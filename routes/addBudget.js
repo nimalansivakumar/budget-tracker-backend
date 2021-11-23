@@ -1,24 +1,39 @@
 const express = require("express");
 const router = express.Router();
-const budgetSchema = require("../models/budgets");
+const Budgets = require("../models/budgets");
 const mongoose = require("mongoose");
 
 router.post("/", async (req, res) => {
   try {
-    const email = req.body.email;
-    const { date, fundAlloted, description } = req.body.newBudget;
+    const userid = req.body.id;
+    const { date, fundAlloted, budgetName } = req.body.newBudget;
+    const docsExist = await Budgets.exists({ id: userid });
 
-    const newBudget = mongoose.model(email, budgetSchema);
+    const addNewBudget = async () => {
+      await Budgets.findOneAndUpdate(
+        { id: userid },
+        {
+          $addToSet: {
+            budgets: {
+              date: date,
+              fundAlloted: fundAlloted,
+              budgetName: budgetName,
+            },
+          },
+        }
+      );
+    };
 
-    const budget = new newBudget({
-      date,
-      fundAlloted,
-      description,
-    });
+    if (docsExist) {
+      addNewBudget();
+    } else {
+      const budgetDoc = new Budgets({
+        id: userid,
+      });
+      await budgetDoc.save();
+      addNewBudget();
+    }
 
-    await budget.save();
-
-    console.log(email, date, fundAlloted, description);
     res.status(200).send("Data Recieved");
   } catch (e) {
     res.status(400).send("Server Error");
