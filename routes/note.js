@@ -52,4 +52,26 @@ router.post("/addNote", async (req, res) => {
   }
 });
 
+router.post("/deleteNote", async (req, res) => {
+  try {
+    const { userid, noteID } = req.body;
+
+    await Notes.updateOne(
+      { id: userid },
+      {
+        $pull: {
+          notes: {
+            _id: noteID,
+          },
+        },
+      }
+    );
+
+    res.status(200).send("Data Received");
+  } catch (e) {
+    console.log(e);
+    res.status(400).send("Server Error");
+  }
+});
+
 module.exports = router;
