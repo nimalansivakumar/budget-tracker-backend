@@ -11,19 +11,22 @@ router.get("/fetchUser/:userid", async (req, res) => {
     const userData = await User.find({ email: req.params.userid });
 
     //fetch budgetnames
-    await Budgets.exists().then(async () => {
-      await Budgets.find({ id: req.params.userid })
-        .select("budgets")
-        .then((list) => {
-          list[0].budgets.forEach((val) => {
-            budgetList.push(val.budgetName);
+    try {
+      await Budgets.exists().then(async () => {
+        await Budgets.find({ id: req.params.userid })
+          .select("budgets")
+          .then((list) => {
+            list[0].budgets.forEach((val) => {
+              budgetList.push(val.budgetName);
+            });
           });
-        });
-    });
+      });
+    } catch (e) {
+      return res.json({ userData, budgetList: "No Budgets Found" });
+    }
 
     return res.json({ userData, budgetList });
   } catch (e) {
-    console.log(e);
     res.status(400).send("Server Error");
   }
 });

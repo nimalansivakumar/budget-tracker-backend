@@ -22,7 +22,7 @@ app.use("/dashboard/addBudget", require("./routes/addBudget"));
 app.use("/dashboard/dataEntry", require("./routes/dataEntry"));
 app.use("/dashboard/dataBoard", require("./routes/dataBoard"));
 app.use("/dashboard/notes", require("./routes/note"));
-
+app.use("/users", require("./routes/admin"));
 
 app.get("/", (req, res) => res.send("API is running"));
 app.listen(PORT, () =>

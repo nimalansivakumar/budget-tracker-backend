@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Budgets = require("../models/budgets");
-const mongoose = require("mongoose");
 
 router.post("/", async (req, res) => {
   try {
@@ -35,6 +34,16 @@ router.post("/", async (req, res) => {
     }
 
     res.status(200).send("Data Recieved");
+  } catch (e) {
+    res.status(400).send("Server Error");
+  }
+});
+
+router.get("/fetchBudgets/:userid", async (req, res) => {
+  try {
+    const fetchedBudgets = await Budgets.findOne({ id: req.params.userid });
+
+    return res.json(fetchedBudgets.budgets);
   } catch (e) {
     res.status(400).send("Server Error");
   }

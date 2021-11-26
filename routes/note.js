@@ -61,7 +61,7 @@ router.post("/deleteNote", async (req, res) => {
       {
         $pull: {
           notes: {
-            _id: noteID,
+            _id: noteID, 
           },
         },
       }
